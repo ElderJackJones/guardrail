@@ -1,0 +1,22 @@
+@import "@picocss/pico/css/pico.min.css";
+
+html, body {
+  width: 350px;
+  min-height: 325px;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 10px;
+}
+
+p {
+  margin-top: 20px ;
+  margin-bottom: 20px ;
+}
+
+#buttonbox {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
