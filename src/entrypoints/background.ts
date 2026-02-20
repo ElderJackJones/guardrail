@@ -1,3 +1,5 @@
+import { getDomain } from "tldts";
+
 export default defineBackground(() => {
 
   async function fetchQuote() {
@@ -15,5 +17,27 @@ export default defineBackground(() => {
       return true;
     }
   });
+
+  chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
+
+    if (details.frameId !== 0) return
+
+    const { railed = [] } = await chrome.storage.local.get("railed");
+    const railList = railed as string[]; 
+
+    const url = details.url
+    if (url.startsWith(chrome.runtime.getURL(""))) return;
+    const domain = getDomain(url)
+
+    if (!railed || !domain) return
+
+    if (railList.includes(domain)) {
+      chrome.tabs.update(details.tabId, {
+        url: chrome.runtime.getURL("wait.html") +
+            "?target=" + encodeURIComponent(details.url)
+      });
+    }
+    
+  })
 
 });
