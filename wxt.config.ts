@@ -5,6 +5,10 @@ export default defineConfig({
   srcDir: 'src',
   modules: ['@wxt-dev/module-svelte'],
   manifest: {
-    permissions: ['storage']
+    permissions: ['storage'],
+    host_permissions: ['https://thequoteshub.com/*'],
+    "background": {
+      "service_worker": "background.js"
+    }
   }
 });
