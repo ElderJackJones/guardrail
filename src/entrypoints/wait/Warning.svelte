@@ -1,7 +1,9 @@
 <script>
+    
     export let site = "this site";
     export let quote = "Loading quote...";
     import { onMount } from "svelte";
+    import { getDomain } from "tldts";
 
     let seconds = 90;
     let interval;
@@ -9,7 +11,7 @@
     const params = new URLSearchParams(window.location.search);
     const originalUrl = params.get("target");
 
-    site = originalUrl
+    site = getDomain(originalUrl)
 
     const startTimer = () => {
     interval = setInterval(() => {
@@ -22,11 +24,12 @@
     };
 
     const handleContinue = () => {
-    console.log("Continue to site");
+        chrome.storage.local.set({ allow: site })
+        window.location.replace(originalUrl)
     };
 
     const handleStay = () => {
-    console.log("Stay on current page");
+        window.location.replace('google.com')
     };
 
     startTimer();
@@ -44,6 +47,7 @@
     );
 
     })
+
     </script>
 
 
