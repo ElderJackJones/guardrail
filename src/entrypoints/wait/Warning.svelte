@@ -29,7 +29,9 @@
     };
 
     const handleStay = () => {
-        window.location.replace('google.com')
+        chrome.tabs.getCurrent((tab) => {
+            if (tab?.id) chrome.tabs.remove(tab.id);
+        });
     };
 
     startTimer();
