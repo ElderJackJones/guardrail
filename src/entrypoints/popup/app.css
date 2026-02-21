@@ -3,20 +3,53 @@
 html, body {
   width: 350px;
   min-height: 325px;
+  padding-top: .5rem;
+  padding-bottom: .5rem;
 }
 
-h1 {
-  text-align: center;
-  margin-top: 10px;
-}
-
-p {
-  margin-top: 20px ;
-  margin-bottom: 20px ;
-}
-
-#buttonbox {
-  display: flex;
-  justify-content: flex-end;
+small[role="status"] {
+  display: block;
+  width: 100%;
   margin-top: 1rem;
+  text-align: left;
+  font-size: 0.8rem;
+}
+
+small.success {
+  color: var(--color);
+  opacity: 0.75;
+}
+
+small.error {
+  color: var(--del-color);
+}
+
+.rail-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid var(--muted-border-color);
+}
+
+.rail-item:last-child {
+  border-bottom: none;
+}
+
+/* Remove button styling */
+.rail-item button.mini {
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
+  width: auto;
+  margin: 0;
+  opacity: 0;
+  transform: translateX(4px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+/* Show on hover */
+.rail-item:hover button.mini {
+  opacity: 1;
+  transform: translateX(0);
 }

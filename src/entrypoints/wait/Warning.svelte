@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     
     export let site = "this site";
     export let quote = "Loading quote...";
@@ -6,7 +6,7 @@
     import { getDomain } from "tldts";
 
     let seconds = 90;
-    let interval;
+    let interval : NodeJS.Timeout;
 
     const params = new URLSearchParams(window.location.search);
     const originalUrl = params.get("target") ?? "";

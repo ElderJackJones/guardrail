@@ -1,33 +1,118 @@
-<script>
+<script lang="ts">
   import { getDomain } from "tldts";
+  import { onMount } from "svelte";
 
-  let website = ''
+  let website = "";
+  let railed: string[] = [];
+  let message = "";
+  let messageType: "success" | "error" | "" = "";
 
-  let addToRail = async (domain) => {
-    const { railed = [] } = await chrome.storage.local.get("railed")
-    const updated = [...railed, domain]
-    await chrome.storage.local.set({ railed: updated })
-  }
+  const loadRail = async () => {
+    const result = await chrome.storage.local.get("railed");
+    railed = Array.isArray(result.railed) ? result.railed : [];
+  };
 
-  let prepForRail = async (websiteString) => {
-    const domain = getDomain(websiteString)
+  onMount(loadRail);
 
-    if (!domain) return
+  const normalize = (input: string) => {
+    if (!input.startsWith("http")) {
+      return "https://" + input;
+    }
+    return input;
+  };
 
-    await addToRail(domain)
-    website = ''
-  }
+  const addToRail = async (domain: string) => {
+    const updated = Array.from(new Set([...railed, domain]));
+    await chrome.storage.local.set({ railed: updated });
+    message = `${domain} added to rail`;
+    messageType = "success";
+    await loadRail();
+  };
 
+  const removeFromRail = async (domain: string) => {
+    const updated = railed.filter((item) => item !== domain);
+    await chrome.storage.local.set({ railed: updated });
+    message = `${domain} removed from rail`;
+    messageType = "success";
+    await loadRail();
+  };
 
+  const prepForRail = async (websiteString: string, flag: string) => {
+    const domain = getDomain(websiteString);
+
+    if (!domain) {
+      message = "Invalid domain";
+      messageType = "error";
+      return;
+    }
+
+    if (flag === "add") {
+      await addToRail(domain);
+    } else {
+      await removeFromRail(domain);
+    }
+
+    website = "";
+
+    setTimeout(() => {
+      message = "";
+      messageType = "";
+    }, 500);
+  };
 </script>
 
-<main class="container-fluid">
+<main class="container">
   <h1>Guardrail</h1>
-  <p>Welcome to Guardrail, a simple system to interrupt distracting or destructive behaviors. </p>
-  <hr />
-  <p>Enter a website you want to guardrail to begin</p>
-  <input bind:value={website} type="text" name="rail" placeholder="Website" aria-label="Website">
-  <div id="buttonbox">
-    <button class="contrast" onclick={async () => await prepForRail(website)}>Add to the Rail</button>
-  </div>
+  <p>Interrupt distractions before they interrupt you.</p>
+
+  <article>
+    <label for="rail">Website</label>
+    <input
+      bind:value={website}
+      type="text"
+      name="rail"
+      placeholder="example.com"
+      aria-label="Website"
+    />
+
+    <div class="grid">
+      <button
+        class="contrast"
+        onclick={async () =>
+          await prepForRail(normalize(website), "add")}
+      >
+        Add
+      </button>
+    </div>
+  </article>
+  <section>
+    <h3>On the Rail</h3>
+
+    {#if railed.length === 0}
+      <p><em>No sites currently guarded.</em></p>
+    {:else}
+      <ul>
+        {#each railed as domain}
+          <li class="rail-item">
+            <span>{domain}</span>
+            <button
+              class="secondary outline mini"
+              onclick={async () => await removeFromRail(domain)}
+            >
+              Remove
+            </button>
+          </li>
+        {/each}
+      </ul>
+    {/if}
+  </section>
+  {#if message}
+      <small
+        class={messageType === "error" ? "error" : "success"}
+        role="status"
+      >
+        {message}
+      </small>
+    {/if}
+
 </main>
