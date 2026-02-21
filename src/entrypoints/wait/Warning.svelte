@@ -9,9 +9,9 @@
     let interval;
 
     const params = new URLSearchParams(window.location.search);
-    const originalUrl = params.get("target");
+    const originalUrl = params.get("target") ?? "";
 
-    site = getDomain(originalUrl)
+    site = originalUrl ? getDomain(originalUrl) ?? "this site" : "this site"
 
     const startTimer = () => {
     interval = setInterval(() => {
@@ -23,29 +23,30 @@
     }, 1000);
     };
 
-    const handleContinue = () => {
-        chrome.storage.local.set({ allow: site })
+    const handleContinue = async () => {
+        await chrome.storage.local.set({ allow: site })
         window.location.replace(originalUrl)
     };
 
-    const handleStay = () => {
-        chrome.tabs.getCurrent((tab) => {
-            if (tab?.id) chrome.tabs.remove(tab.id);
-        });
+    const handleStay = async () => {
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+        if (tab?.id) {
+            chrome.tabs.remove(tab.id);
+        }
     };
 
-    startTimer();
 
     onMount(() => {
-    chrome.runtime.sendMessage(
-        { type: "GET_QUOTE" },
-        (response) => {
-        if (response.success) {
-            quote = response.quote
-            } else {
-            console.error(response.error);
+        startTimer();
+        chrome.runtime.sendMessage(
+            { type: "GET_QUOTE" },
+            (response) => {
+            if (response.success) {
+                quote = response.quote
+                } else {
+                console.error(response.error);
+            }
         }
-    }
     );
 
     })
@@ -77,11 +78,11 @@
     </blockquote>
 
     <div class="actions">
-        <button on:click={handleStay}>
+        <button on:click={async () => await handleStay()}>
         Stay
         </button>
 
-        <button class="secondary outline" disabled={seconds > 0} on:click={handleContinue}>
+        <button class="secondary outline" disabled={seconds > 0} on:click={async () =>  await handleContinue()}>
         Continue
         </button>
     </div>
