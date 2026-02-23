@@ -62,7 +62,7 @@
 </script>
 
 <main class="container">
-  <h1>Guardrail</h1>
+  <h1>guardrail</h1>
   <p>Interrupt distractions before they interrupt you.</p>
 
   <article>
@@ -86,7 +86,7 @@
     </div>
   </article>
   <section>
-    <h3>On the Rail</h3>
+    <h3 class="railtitle">on the rail</h3>
 
     {#if railed.length === 0}
       <p><em>No sites currently guarded.</em></p>

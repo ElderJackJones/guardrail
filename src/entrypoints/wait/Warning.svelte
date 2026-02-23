@@ -1,7 +1,6 @@
 <script lang="ts">
     
     export let site = "this site";
-    export let quote = "Loading quote...";
     import { onMount } from "svelte";
     import { getDomain } from "tldts";
 
@@ -42,17 +41,6 @@
 
     onMount(() => {
         startTimer();
-        chrome.runtime.sendMessage(
-            { type: "GET_QUOTE" },
-            (response) => {
-            if (response.success) {
-                quote = response.quote
-                } else {
-                console.error(response.error);
-            }
-        }
-    );
-
     })
 
     </script>
@@ -73,13 +61,9 @@
         {#if seconds > 0}
         <p class="timer">{seconds}</p>
         {:else}
-        <p class="subtle">You can choose what happens next.</p>
+        <p class="subtle">It's up to you.</p>
         {/if}
     </section>
-
-    <blockquote>
-        {quote}
-    </blockquote>
 
     <div class="actions">
         <button on:click={async () => await handleStay()}>
@@ -122,13 +106,6 @@
     .timer {
     font-size: 2.5rem;
     margin-top: 1rem;
-    }
-
-    blockquote {
-    margin: 2rem 0;
-    font-style: italic;
-    opacity: 0.7;
-    border-left: none;
     }
 
     .actions {

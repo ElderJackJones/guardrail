@@ -53,3 +53,7 @@ small.error {
   opacity: 1;
   transform: translateX(0);
 }
+
+.railtitle {
+  margin-top: 3rem;
+}
