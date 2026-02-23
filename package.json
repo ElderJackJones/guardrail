@@ -18,6 +18,7 @@
     "@tsconfig/svelte": "^5.0.7",
     "@types/chrome": "^0.1.36",
     "@wxt-dev/module-svelte": "^2.0.4",
+    "prettier-plugin-svelte": "^3.5.0",
     "svelte": "^5.49.2",
     "svelte-check": "^4.3.6",
     "tslib": "^2.8.1",

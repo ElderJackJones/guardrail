@@ -66,24 +66,25 @@
   <p>Interrupt distractions before they interrupt you.</p>
 
   <article>
-    <label for="rail">Website</label>
-    <input
-      bind:value={website}
-      type="text"
-      name="rail"
-      placeholder="example.com"
-      aria-label="Website"
-    />
+    <form
+      onsubmit={async (e) => {
+        e.preventDefault();
+        await prepForRail(normalize(website), "add");
+      }}
+    >
+      <label for="rail">Website</label>
+      <input
+        bind:value={website}
+        type="text"
+        name="rail"
+        placeholder="example.com"
+        aria-label="Website"
+      />
 
-    <div class="grid">
-      <button
-        class="contrast"
-        onclick={async () =>
-          await prepForRail(normalize(website), "add")}
-      >
-        Add
-      </button>
-    </div>
+      <div class="grid">
+        <button class="contrast" type="submit"> Add </button>
+      </div>
+    </form>
   </article>
   <section>
     <h3 class="railtitle">on the rail</h3>
@@ -107,12 +108,8 @@
     {/if}
   </section>
   {#if message}
-      <small
-        class={messageType === "error" ? "error" : "success"}
-        role="status"
-      >
-        {message}
-      </small>
-    {/if}
-
+    <small class={messageType === "error" ? "error" : "success"} role="status">
+      {message}
+    </small>
+  {/if}
 </main>
