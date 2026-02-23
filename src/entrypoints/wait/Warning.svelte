@@ -24,7 +24,11 @@
     };
 
     const handleContinue = async () => {
-        await chrome.storage.local.set({ allow: site })
+        let domain = getDomain(originalUrl)
+        chrome.runtime.sendMessage({
+            type: "allow-tab",
+            domain
+        })
         window.location.replace(originalUrl)
     };
 
