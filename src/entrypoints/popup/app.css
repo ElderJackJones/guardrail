@@ -1,59 +1,265 @@
-@import "@picocss/pico/css/pico.min.css";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+/* ─── Design Tokens ─── */
+:root {
+  --bg:         #faf9f7;
+  --surface:    #ffffff;
+  --border:     #e8e5e1;
+  --text:       #3d3833;
+  --text-muted: #9a938b;
+  --accent:     #7c9a82;
+  --accent-hover: #6b8a71;
+  --danger:     #c27a6e;
+  --radius:     12px;
+  --radius-sm:  8px;
+  --shadow:     0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+  --font:       'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:         #1a1a1a;
+    --surface:    #242424;
+    --border:     #333333;
+    --text:       #e0e0e0;
+    --text-muted: #888888;
+    --accent:     #8ca691;
+    --accent-hover: #a1b8a5;
+    --danger:     #d18c81;
+    --shadow:     0 4px 12px rgba(0,0,0,0.2);
+  }
+}
+
+/* ─── Reset & Base ─── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 html, body {
-  width: 350px;
-  min-height: 325px;
-  padding-top: .5rem;
-  padding-bottom: .5rem;
+  width: 340px;
+  min-height: 320px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }
 
-small[role="status"] {
-  display: block;
+/* ─── Container ─── */
+.container {
+  padding: 20px 18px 16px;
+}
+
+/* ─── Header ─── */
+h1 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.container > p {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+  font-weight: 400;
+}
+
+/* ─── Form Card ─── */
+article {
+  margin-top: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  box-shadow: var(--shadow);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+input[type="text"] {
   width: 100%;
-  margin-top: 1rem;
-  text-align: left;
-  font-size: 0.8rem;
+  padding: 9px 12px;
+  font-size: 0.85rem;
+  font-family: var(--font);
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-small.success {
-  color: var(--color);
-  opacity: 0.75;
+input[type="text"]::placeholder {
+  color: var(--text-muted);
+  opacity: 0.7;
 }
 
-small.error {
-  color: var(--del-color);
+input[type="text"]:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(124, 154, 130, 0.12);
+}
+
+/* ─── Buttons ─── */
+.grid {
+  display: flex;
+}
+
+button {
+  font-family: var(--font);
+  font-size: 0.82rem;
+  font-weight: 500;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+button[type="submit"],
+button.contrast {
+  width: 100%;
+  padding: 9px 16px;
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+}
+
+button[type="submit"]:hover,
+button.contrast:hover {
+  background: var(--accent-hover);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  transform: translateY(-0.5px);
+}
+
+button[type="submit"]:active,
+button.contrast:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+
+/* ─── Rail Section ─── */
+section {
+  margin-top: 20px;
+}
+
+.railtitle {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+}
+
+ul {
+  list-style: none;
 }
 
 .rail-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5rem;
-  padding: 0.35rem 0;
-  border-bottom: 1px solid var(--muted-border-color);
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  transition: background 0.15s ease;
+  animation: slideUp 0.3s ease-out backwards;
 }
 
-.rail-item:last-child {
-  border-bottom: none;
+.rail-item:nth-child(1) { animation-delay: 0.05s; }
+.rail-item:nth-child(2) { animation-delay: 0.1s; }
+.rail-item:nth-child(3) { animation-delay: 0.15s; }
+.rail-item:nth-child(4) { animation-delay: 0.2s; }
+
+.rail-item:hover {
+  background: rgba(0,0,0,0.025);
 }
 
-/* Remove button styling */
+@media (prefers-color-scheme: dark) {
+  .rail-item:hover {
+    background: rgba(255,255,255,0.04);
+  }
+}
+
+.rail-item span {
+  font-size: 0.84rem;
+  font-weight: 450;
+  color: var(--text);
+}
+
+/* Remove button — gentle, appears on hover */
 .rail-item button.mini {
-  font-size: 0.7rem;
-  padding: 0.2rem 0.5rem;
+  font-size: 0.68rem;
+  font-weight: 500;
+  padding: 3px 8px;
   width: auto;
   margin: 0;
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid transparent;
+  border-radius: 6px;
   opacity: 0;
   transform: translateX(4px);
-  transition: opacity 0.15s ease, transform 0.15s ease;
+  transition: opacity 0.18s ease, transform 0.18s ease, background 0.15s ease, border-color 0.15s ease;
 }
 
-/* Show on hover */
 .rail-item:hover button.mini {
   opacity: 1;
   transform: translateX(0);
 }
 
-.railtitle {
-  margin-top: 3rem;
+.rail-item button.mini:hover {
+  background: rgba(194,122,110,0.08);
+  border-color: rgba(194,122,110,0.2);
+}
+
+/* Empty state */
+em {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-style: normal;
+}
+
+/* ─── Status Messages ─── */
+small[role="status"] {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 500;
+  animation: fadeIn 0.2s ease;
+}
+
+small.success {
+  color: var(--accent);
+}
+
+small.error {
+  color: var(--danger);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }

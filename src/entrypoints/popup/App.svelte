@@ -24,24 +24,26 @@
   const addToRail = async (domain: string) => {
     const updated = Array.from(new Set([...railed, domain]));
     await chrome.storage.local.set({ railed: updated });
-    message = `${domain} added to rail`;
+    message = `Added ${domain}`;
     messageType = "success";
     await loadRail();
   };
 
   const removeFromRail = async (domain: string) => {
-    const updated = railed.filter((item) => item !== domain);
-    await chrome.storage.local.set({ railed: updated });
-    message = `${domain} removed from rail`;
-    messageType = "success";
-    await loadRail();
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (tab?.id) {
+      const waitUrl = chrome.runtime.getURL("/wait.html") + 
+        `?target=https://${domain}&remove=true`;
+      await chrome.tabs.update(tab.id, { url: waitUrl });
+      window.close(); // Close the popup
+    }
   };
 
   const prepForRail = async (websiteString: string, flag: string) => {
     const domain = getDomain(websiteString);
 
     if (!domain) {
-      message = "Invalid domain";
+      message = "Couldn't recognize that domain";
       messageType = "error";
       return;
     }
@@ -57,13 +59,15 @@
     setTimeout(() => {
       message = "";
       messageType = "";
-    }, 500);
+    }, 1200);
   };
 </script>
 
 <main class="container">
-  <h1>guardrail</h1>
-  <p>Interrupt distractions before they interrupt you.</p>
+  <header>
+    <h1>guardrail</h1>
+    <p>A gentle pause before distraction.</p>
+  </header>
 
   <article>
     <form
@@ -77,27 +81,31 @@
         bind:value={website}
         type="text"
         name="rail"
+        id="rail"
         placeholder="example.com"
-        aria-label="Website"
+        aria-label="Website to add"
+        autocomplete="off"
+        spellcheck="false"
       />
 
       <div class="grid">
-        <button class="contrast" type="submit"> Add </button>
+        <button type="submit">Add</button>
       </div>
     </form>
   </article>
+
   <section>
-    <h3 class="railtitle">on the rail</h3>
+    <h3 class="railtitle">guarded sites</h3>
 
     {#if railed.length === 0}
-      <p><em>No sites currently guarded.</em></p>
+      <p><em>Nothing here yet.</em></p>
     {:else}
       <ul>
         {#each railed as domain}
           <li class="rail-item">
             <span>{domain}</span>
             <button
-              class="secondary outline mini"
+              class="mini"
               onclick={async () => await removeFromRail(domain)}
             >
               Remove
@@ -107,6 +115,7 @@
       </ul>
     {/if}
   </section>
+
   {#if message}
     <small class={messageType === "error" ? "error" : "success"} role="status">
       {message}

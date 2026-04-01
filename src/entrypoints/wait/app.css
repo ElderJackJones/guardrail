@@ -1,1 +1,48 @@
-@import "@picocss/pico/css/pico.min.css";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+/* ─── Design Tokens ─── */
+:root {
+  --bg-from:    #f5f3ef;
+  --bg-to:      #eae7e2;
+  --surface:    rgba(255,255,255,0.65);
+  --border:     rgba(0,0,0,0.06);
+  --text:       #3d3833;
+  --text-muted: #9a938b;
+  --accent:     #7c9a82;
+  --accent-hover: #6b8a71;
+  --outline:    rgba(124,154,130,0.35);
+  --radius:     16px;
+  --radius-sm:  10px;
+  --font:       'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-from:    #12141a;
+    --bg-to:      #1c1e26;
+    --surface:    rgba(255,255,255,0.04);
+    --border:     rgba(255,255,255,0.08);
+    --text:       #e0e0e0;
+    --text-muted: #888888;
+    --accent:     #8ca691;
+    --accent-hover: #a1b8a5;
+    --outline:    rgba(140,166,145,0.45);
+  }
+}
+
+/* ─── Reset ─── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  background: linear-gradient(160deg, var(--bg-from), var(--bg-to));
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}

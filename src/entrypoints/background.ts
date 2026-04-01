@@ -22,15 +22,6 @@ export default defineBackground(() => {
     allowedTabs.delete(tabId);
   });
 
-  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.type === "GET_QUOTE") {
-      fetchQuote()
-        .then((quote) => sendResponse({ success: true, quote }))
-        .catch((err) => sendResponse({ success: false, error: err.message }));
-
-      return true;
-    }
-  });
 
   let railList: string[] = [];
 

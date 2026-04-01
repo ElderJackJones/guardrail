@@ -5,10 +5,12 @@ export default defineConfig({
   srcDir: 'src',
   modules: ['@wxt-dev/module-svelte'],
   manifest: {
-    permissions: ['storage', 'webNavigation'],
-    host_permissions: ['https://thequoteshub.com/*'],
+    "permissions": ['storage', 'webNavigation'],
     "background": {
       "service_worker": "background.js"
-    }
+    },
+    "name": "guardrail", 
+    "description": "The internet in your hands, not the other way around.",
+    "version": "1.0.0",
   }
 });
